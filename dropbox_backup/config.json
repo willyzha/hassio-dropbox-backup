@@ -1,0 +1,23 @@
+{
+  "name": "Dropbox Uploader",
+  "version": "22",
+  "slug": "dropbox_uploader",
+  "description": "Upload snapshots to dropbox.",
+  "arch": ["armhf", "armv7", "aarch64", "amd64", "i386"],
+  "startup": "before",
+  "boot": "auto",
+  "stdin": true,
+  "hassio_api": true,
+  "hassio_role": "manager",
+  "map": ["backup", "share"],
+  "options": {
+    "oauth_access_token": "<YOUR_ACCESS_TOKEN>",
+    "output": ""
+  },
+  "schema": {
+    "oauth_access_token": "str",
+    "output": "str",
+    "retries": "int(1,)?",
+    "keep_last": "int(0,)?"
+  }
+}
