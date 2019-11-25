@@ -1,5 +1,5 @@
-ARG BUILD_FROM
-FROM $BUILD_FROM
+ARG BUILD_FROM=hassioaddons/base:0.0.1
+FROM ${BUILD_FROM}
 
 # Add env
 ENV LANG C.UTF-8
@@ -19,3 +19,6 @@ WORKDIR /
 
 
 CMD [ "/run.sh" ]
+
+
+LABEL io.hass.version="VERSION" io.hass.type="addon" io.hass.arch="armhf|aarch64|i386|amd64"
