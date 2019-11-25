@@ -20,5 +20,26 @@ WORKDIR /
 
 CMD [ "/run.sh" ]
 
+# Build arguments
+ARG BUILD_ARCH
+ARG BUILD_DATE
+ARG BUILD_REF
+ARG BUILD_VERSION
 
-LABEL io.hass.version="VERSION" io.hass.type="addon" io.hass.arch="armhf|aarch64|i386|amd64"
+# Labels
+LABEL \
+    io.hass.name="Dropbox Backup" \
+    io.hass.description="Backup Hass.io snapshots to Dropbox." \
+    io.hass.arch="${BUILD_ARCH}" \
+    io.hass.type="addon" \
+    io.hass.version=${BUILD_VERSION} \
+    maintainer="Willy Zhang <willyzha@gmail.com>" \
+    org.label-schema.description="Backup Hass.io snapshots to Dropbox" \
+    org.label-schema.build-date=${BUILD_DATE} \
+    org.label-schema.name="Dropbox Backup" \
+    org.label-schema.schema-version="1.0" \
+    org.label-schema.url="https://github.com/willyzha/hassio-dropbox-backup/blob/master/README.md" \
+    org.label-schema.usage="https://github.com/willyzha/hassio-dropbox-backup/blob/master/README.md" \
+    org.label-schema.vcs-ref=${BUILD_REF} \
+    org.label-schema.vcs-url="https://github.com/willyzha/hassio-dropbox-backup" \
+    org.label-schema.vendor="Willy's Hass.io Add-ons"
