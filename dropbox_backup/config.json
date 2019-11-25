@@ -1,8 +1,9 @@
 {
-  "name": "Dropbox Uploader",
+  "name": "Dropbox Backup",
   "version": "22",
-  "slug": "dropbox_uploader",
+  "slug": "dropbox_backup",
   "description": "Upload snapshots to dropbox.",
+  "url": "https://github.com/willyzha/hassio-dropbox-backup",
   "arch": ["armhf", "armv7", "aarch64", "amd64", "i386"],
   "startup": "before",
   "boot": "auto",
@@ -19,5 +20,6 @@
     "output": "str",
     "retries": "int(1,)?",
     "keep_last": "int(0,)?"
-  }
+  },
+  "image": "willyzha/dropbox-backup-{arch}"  
 }
