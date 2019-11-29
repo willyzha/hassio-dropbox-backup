@@ -109,7 +109,7 @@ if __name__ == '__main__':
             print("Deleting: " + file.path_lower, flush=True)
             dbx.files_delete(file.path_lower);
             
-            if (get_available_space() >= get_file_size(upload_file_path)):
+            if (get_dropbox_available_space() >= get_file_size(upload_file_path)):
                 break
                 
         upload_file(upload_file_path, retries=retries)
