@@ -100,7 +100,7 @@ if __name__ == '__main__':
             "access token from the app console on the web.")
 
     if (get_dropbox_available_space() >= get_file_size(upload_file_path)):
-        upload_file(upload_file_path, dropbox_path + "/" + get_filename(upload_file_path))
+        upload_file(upload_file_path, dropbox_path + "/" + get_filename(upload_file_path), retries=retries)
     else:
         print("Dropbox storage full! Deleting oldest files...", flush=True)
         filelist = dbx.files_list_folder(dropbox_path).entries
@@ -112,5 +112,5 @@ if __name__ == '__main__':
             if (get_dropbox_available_space() >= get_file_size(upload_file_path)):
                 break
                 
-        upload_file(upload_file_path, retries=retries)
+        upload_file(upload_file_path, dropbox_path + "/" + get_filename(upload_file_path), retries=retries)
  
