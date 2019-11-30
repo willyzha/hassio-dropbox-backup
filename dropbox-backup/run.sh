@@ -32,7 +32,7 @@ while read -r msg; do
         echo "[Info] Uploading all .tar files in /backup (skipping those already in Dropbox)"
         shopt -s nullglob
         file_list=""
-        for f in `ls -tU /backup/*.tar`
+        for f in `ls -tc -r /backup/*.tar`
         do
             #echo "Uploading ${f}..."
             file_list="${file_list} ${f}"
