@@ -31,16 +31,18 @@ while read -r msg; do
     if [[ $cmd = "upload" ]]; then
         echo "[Info] Uploading all .tar files in /backup (skipping those already in Dropbox)"
         shopt -s nullglob
-        for f in /backup/*.tar
+        file_list=""
+        for f in `ls -tU /backup/*.tar`
         do
             #echo "Uploading ${f}..."
-            python3 ./dropbox_uploader.py "$f" "$TOKEN" "$OUTPUT_DIR" --retries "$RETRIES"
+            file_list="${file_list} ${f}"
             #echo "Done!"
             if [[ "$FILETYPES" ]]; then
                 echo "[Info] filetypes option is set, scanning share directory for files with extensions ${FILETYPES}"
                 find /share -regextype posix-extended -regex "^.*\.(${FILETYPES})" -exec ./dropbox_uploader.sh -s -f /etc/uploader.conf upload {} "$OUTPUT_DIR" \;
             fi
         done
+        python3 ./dropbox_uploader.py "$file_list" "$TOKEN" "$OUTPUT_DIR" --retries "$RETRIES"        
         echo "[Info] Uploading complete!"
         
         if [[ "$KEEP_LAST" ]]; then

@@ -72,15 +72,24 @@ def upload_file(file_path, dropbox_path, retries=1):
    
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Upload snapshots to dropbox.')
-    parser.add_argument('snapshot_file', type=str, help='Path to snapshot file.')
+    parser.add_argument('snapshot_files', type=str, help='Path to snapshot file.', nargs='+')
     parser.add_argument('dropbox_token', type=str, help='Dropbox API token.')
     parser.add_argument('dropbox_path', type=str, help='Path in dropbox.')
     parser.add_argument('-r', '--retries', type=int, default=3, help='Number of upload retries before giving up. Default: 3')
+    parser.add_argument('-d', '--debug', type=bool, default=False, help='Debug printout. Default: False')
     args = parser.parse_args()
     token = args.dropbox_token
-    dropbox_path = args.dropbox_path
-    upload_file_path = args.snapshot_file
+    dropbox_folder = args.dropbox_path
+    upload_file_paths = args.snapshot_files
     retries = args.retries
+    debug = args.debug
+
+    if debug:
+        print("INPUT_ARGUMENTS")
+        print("  " + str(args.snapshot_files))
+        print("  " + str(args.dropbox_token))
+        print("  " + str(args.dropbox_path))
+        print("  " + str(args.retries))
 
     # Check for an access token
     if (len(token) == 0):
@@ -99,18 +108,25 @@ if __name__ == '__main__':
         sys.exit("ERROR: Invalid access token; try re-generating an "
             "access token from the app console on the web.")
 
-    if (get_dropbox_available_space() >= get_file_size(upload_file_path)):
-        upload_file(upload_file_path, dropbox_path + "/" + get_filename(upload_file_path), retries=retries)
-    else:
-        print("Dropbox storage full! Deleting oldest files...", flush=True)
-        filelist = dbx.files_list_folder(dropbox_path).entries
-        filelist.sort(key=lambda x: x.server_modified, reverse=False)
-        for file in filelist:
-            print("Deleting: " + file.path_lower, flush=True)
-            dbx.files_delete(file.path_lower);
-            
+    for upload_file_path in upload_file_paths:
+    
+        dropbox_path = dropbox_folder + "/" + get_filename(upload_file_path)
+        
+        if (dropbox_file_exists(dropbox_path)):
+            print(str(get_filename(dropbox_path)) + " already exists. Skipping...", flush=True)
+        else:
             if (get_dropbox_available_space() >= get_file_size(upload_file_path)):
-                break
-                
-        upload_file(upload_file_path, dropbox_path + "/" + get_filename(upload_file_path), retries=retries)
+                upload_file(upload_file_path, dropbox_path, retries=retries)
+            else:
+                print("Dropbox storage full! Deleting oldest files...", flush=True)
+                filelist = dbx.files_list_folder(dropbox_folder).entries
+                filelist.sort(key=lambda x: x.server_modified, reverse=False)
+                for file in filelist:
+                    print("Deleting: " + file.path_lower, flush=True)
+                    dbx.files_delete(file.path_lower);
+                    
+                    if (get_dropbox_available_space() >= get_file_size(upload_file_path)):
+                        break
+                        
+                upload_file(upload_file_path, dropbox_path, retries=retries)
  
