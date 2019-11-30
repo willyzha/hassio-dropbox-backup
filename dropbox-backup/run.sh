@@ -6,7 +6,7 @@ TOKEN=$(jq --raw-output ".oauth_access_token" $CONFIG_PATH)
 OUTPUT_DIR=$(jq --raw-output ".output // empty" $CONFIG_PATH)
 RETRIES=$(jq --raw-output ".retries // empty" $CONFIG_PATH)
 KEEP_LAST=$(jq --raw-output ".keep_last // empty" $CONFIG_PATH)
-DEBUG=$(jq --raw-output ".keep_last // empty" $CONFIG_PATH)
+DEBUG=$(jq --raw-output ".debug // empty" $CONFIG_PATH)
 
 if [[ -z "$OUTPUT_DIR" ]]; then
     OUTPUT_DIR="/"
