@@ -6,6 +6,7 @@ TOKEN=$(jq --raw-output ".oauth_access_token" $CONFIG_PATH)
 OUTPUT_DIR=$(jq --raw-output ".output // empty" $CONFIG_PATH)
 RETRIES=$(jq --raw-output ".retries // empty" $CONFIG_PATH)
 KEEP_LAST=$(jq --raw-output ".keep_last // empty" $CONFIG_PATH)
+DEBUG=$(jq --raw-output ".keep_last // empty" $CONFIG_PATH)
 
 if [[ -z "$OUTPUT_DIR" ]]; then
     OUTPUT_DIR="/"
@@ -14,6 +15,13 @@ fi
 if [[ -z "$RETRIES" ]]; then
     RETRIES=1
 fi
+
+if [[ -z "$DEBUG" ]]; then
+    DEBUG="False"
+else
+    DEBUG="True"
+fi
+
 
 echo "[Info] Files will be uploaded to: ${OUTPUT_DIR}"
 
@@ -31,18 +39,9 @@ while read -r msg; do
     if [[ $cmd = "upload" ]]; then
         echo "[Info] Uploading all .tar files in /backup (skipping those already in Dropbox)"
         shopt -s nullglob
-        file_list=""
-        for f in `ls -tc -r /backup/*.tar`
-        do
-            #echo "Uploading ${f}..."
-            file_list="${file_list} ${f}"
-            #echo "Done!"
-            if [[ "$FILETYPES" ]]; then
-                echo "[Info] filetypes option is set, scanning share directory for files with extensions ${FILETYPES}"
-                find /share -regextype posix-extended -regex "^.*\.(${FILETYPES})" -exec ./dropbox_uploader.sh -s -f /etc/uploader.conf upload {} "$OUTPUT_DIR" \;
-            fi
-        done
-        python3 ./dropbox_uploader.py "$file_list" "$TOKEN" "$OUTPUT_DIR" --retries "$RETRIES"        
+        file_list=`ls -tc -r /backup/*.tar`
+
+        python3 ./dropbox_uploader.py ${file_list[*]} "$TOKEN" "$OUTPUT_DIR" --retries "$RETRIES" --debug "$DEBUG"
         echo "[Info] Uploading complete!"
         
         if [[ "$KEEP_LAST" ]]; then

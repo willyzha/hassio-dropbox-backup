@@ -19,7 +19,8 @@
     "oauth_access_token": "str",
     "output": "str",
     "retries": "int(1,)?",
-    "keep_last": "int(0,)?"
+    "keep_last": "int(0,)?",
+    "debug": "bool?"
   },
   "image": "willyzha/dropbox-backup-{arch}"  
 }
