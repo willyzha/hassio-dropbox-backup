@@ -45,7 +45,7 @@ while read -r msg; do
     if [[ $cmd = "upload" ]]; then
         echo "[Info] Uploading all .tar files in /backup (skipping those already in Dropbox)" | tee $LOG_PATH
         shopt -s nullglob | tee $LOG_PATH -a
-        file_list=`ls -tc -r /backup/*.tar` | tee $LOG_PATH -a
+        file_list=`ls -tc -r /backup/*.tar`
 
         echo python3 ./dropbox_uploader.py ${file_list[*]} ${TOKEN} ${OUTPUT_DIR} --retries ${RETRIES} ${DEBUG} | tee $LOG_PATH -a
         python3 ./dropbox_uploader.py ${file_list[*]} ${TOKEN} ${OUTPUT_DIR} --retries ${RETRIES} ${DEBUG} | tee $LOG_PATH -a
