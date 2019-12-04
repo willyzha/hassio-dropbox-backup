@@ -55,6 +55,7 @@ while read -r msg; do
             python3 /backup_cleanup.py "$KEEP_LAST" | tee $LOG_PATH -a
         fi
     elif [[ $cmd = "log" ]]; then
+        echo "[Info] Printing latest log file" 
         cat $LOG_PATH
     else
         # received undefined command
