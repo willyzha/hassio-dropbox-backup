@@ -47,7 +47,8 @@ while read -r msg; do
         shopt -s nullglob | tee $LOG_PATH -a
         file_list=`ls -tc -r /backup/*.tar` | tee $LOG_PATH -a
 
-        python3 ./dropbox_uploader.py ${file_list[*]} "$TOKEN" "$OUTPUT_DIR" --retries "$RETRIES" ${DEBUG} | tee $LOG_PATH -a
+        echo python3 ./dropbox_uploader.py ${file_list[*]} ${TOKEN} ${OUTPUT_DIR} --retries ${RETRIES} ${DEBUG} | tee $LOG_PATH -a
+        python3 ./dropbox_uploader.py ${file_list[*]} ${TOKEN} ${OUTPUT_DIR} --retries ${RETRIES} ${DEBUG} | tee $LOG_PATH -a
         echo "[Info] Uploading complete!" | tee $LOG_PATH -a
         
         if [[ "$KEEP_LAST" ]]; then
