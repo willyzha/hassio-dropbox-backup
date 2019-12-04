@@ -84,12 +84,13 @@ if __name__ == '__main__':
     retries = args.retries
     debug = args.debug
 
-    if debug:
+    if debug == True:
         print("INPUT_ARGUMENTS")
         print("  " + str(args.snapshot_files))
         print("  " + str(args.dropbox_token))
         print("  " + str(args.dropbox_path))
         print("  " + str(args.retries))
+        print("  " + str(args.debug))
 
     # Check for an access token
     if (len(token) == 0):
