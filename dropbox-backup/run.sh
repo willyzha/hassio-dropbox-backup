@@ -1,7 +1,7 @@
 #!/bin/bash
 
 CONFIG_PATH=/data/options.json
-LOG_PATH=log.txt
+LOG_PATH=/data/log.txt
 
 TOKEN=$(jq --raw-output ".oauth_access_token" $CONFIG_PATH)
 OUTPUT_DIR=$(jq --raw-output ".output // empty" $CONFIG_PATH)
@@ -43,19 +43,19 @@ while read -r msg; do
     cmd="$(echo "$msg" | jq --raw-output '.command')"
     echo "[Info] Received message with command ${cmd}"
     if [[ $cmd = "upload" ]]; then
-        echo "[Info] Uploading all .tar files in /backup (skipping those already in Dropbox)" > LOG_PATH
-        shopt -s nullglob >> LOG_PATH
-        file_list=`ls -tc -r /backup/*.tar` >> LOG_PATH
+        echo "[Info] Uploading all .tar files in /backup (skipping those already in Dropbox)" | tee $LOG_PATH
+        shopt -s nullglob | tee $LOG_PATH -a
+        file_list=`ls -tc -r /backup/*.tar` | tee $LOG_PATH -a
 
-        python3 ./dropbox_uploader.py ${file_list[*]} "$TOKEN" "$OUTPUT_DIR" --retries "$RETRIES" "$DEBUG" >> LOG_PATH
-        echo "[Info] Uploading complete!" >> LOG_PATH
+        python3 ./dropbox_uploader.py ${file_list[*]} "$TOKEN" "$OUTPUT_DIR" --retries "$RETRIES" ${DEBUG} | tee $LOG_PATH -a
+        echo "[Info] Uploading complete!" | tee $LOG_PATH -a
         
         if [[ "$KEEP_LAST" ]]; then
-            echo "[Info] keep_last option is set, cleaning up files..." >> LOG_PATH
-            python3 /backup_cleanup.py "$KEEP_LAST" >> LOG_PATH
+            echo "[Info] keep_last option is set, cleaning up files..." | tee $LOG_PATH -a
+            python3 /backup_cleanup.py "$KEEP_LAST" | tee $LOG_PATH -a
         fi
-    elif [[ $cmd = "show_log" ]]; then
-        cat "$LOG_PATH"
+    elif [[ $cmd = "log" ]]; then
+        cat $LOG_PATH
     else
         # received undefined command
         echo "[Error] Command not found: ${cmd}"
