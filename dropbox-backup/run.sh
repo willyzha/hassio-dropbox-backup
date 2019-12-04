@@ -17,9 +17,9 @@ if [[ -z "$RETRIES" ]]; then
 fi
 
 if [[ -z "$DEBUG" ]]; then
-    DEBUG="False"
+    DEBUG=""
 else
-    DEBUG="True"
+    DEBUG="--debug"
 fi
 
 
@@ -41,7 +41,7 @@ while read -r msg; do
         shopt -s nullglob
         file_list=`ls -tc -r /backup/*.tar`
 
-        python3 ./dropbox_uploader.py ${file_list[*]} "$TOKEN" "$OUTPUT_DIR" --retries "$RETRIES" --debug "$DEBUG"
+        python3 ./dropbox_uploader.py ${file_list[*]} "$TOKEN" "$OUTPUT_DIR" --retries "$RETRIES" "$DEBUG"
         echo "[Info] Uploading complete!"
         
         if [[ "$KEEP_LAST" ]]; then
