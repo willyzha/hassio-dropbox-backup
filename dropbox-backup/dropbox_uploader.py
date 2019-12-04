@@ -76,7 +76,7 @@ if __name__ == '__main__':
     parser.add_argument('dropbox_token', type=str, help='Dropbox API token.')
     parser.add_argument('dropbox_path', type=str, help='Path in dropbox.')
     parser.add_argument('-r', '--retries', type=int, default=3, help='Number of upload retries before giving up. Default: 3')
-    parser.add_argument('-d', '--debug', type=bool, default=False, help='Debug printout. Default: False')
+    parser.add_argument('-d', '--debug', default=False, action='store_true', help='Debug printout. Default: False')
     args = parser.parse_args()
     token = args.dropbox_token
     dropbox_folder = args.dropbox_path
