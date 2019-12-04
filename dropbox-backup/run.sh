@@ -20,7 +20,6 @@ fi
 if [[ -z "$DEBUG" ]]; then
     DEBUG=""
 else
-    echo "$DEBUG"
     if [[ $DEBUG = true ]]; then
         DEBUG="--debug"
     else
